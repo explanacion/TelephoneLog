@@ -212,6 +212,8 @@ namespace TelephoneLog
                 string filepath = dir + "\\" + filenames[i] + "." + sMonth + sDay;
                 ReadFromLogFile(filepath);
             }
+            // sort by time after reading all files
+            dataGridView1.Sort(dataGridView1.Columns.GetFirstColumn(DataGridViewElementStates.Displayed), ListSortDirection.Ascending);
         }
 
         private void button1_Click(object sender, EventArgs e)
