@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using System.Globalization;
+using System.Diagnostics;
 
 namespace TelephoneLog
 {
@@ -191,11 +192,11 @@ namespace TelephoneLog
                         }
                         else if (line.IndexOf("Saa99594") != -1)
                         {
-                            phoneline = "Линия 2005031";
+                            phoneline = "Линия 2050031";
                         }
                         else if (line.IndexOf("S3be03f2") != -1)
                         {
-                            phoneline = "Линия 2005032";
+                            phoneline = "Линия 2050032";
                         }
 
                     }
@@ -231,6 +232,8 @@ namespace TelephoneLog
             }
             // sort by time after reading all files
             dataGridView1.Sort(dataGridView1.Columns.GetFirstColumn(DataGridViewElementStates.Displayed), ListSortDirection.Ascending);
+            if (checkBox1.Checked)
+                ShowNamesInsteadOfNumbers();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -244,6 +247,100 @@ namespace TelephoneLog
         private void dataGridView1_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
         {
             cnt++;
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            string phonebasefilename = Properties.Settings.Default["phonesbase"].ToString();
+            if (!File.Exists(phonebasefilename))
+            {
+                MessageBox.Show("Файл " + phonebasefilename + " не найден. Вы можете создать его вручную в директории с программой. Его формат: номер|имя");
+                return;
+            }
+            try
+            {
+                var p = new System.Diagnostics.Process();
+                p.StartInfo.FileName = phonebasefilename;
+                p.Start();
+            }
+            catch
+            {
+            }
+        }
+
+        private void ShowNamesInsteadOfNumbers()
+        {
+            string phonebasefilename = Properties.Settings.Default["phonesbase"].ToString();
+            if (!File.Exists(phonebasefilename))
+            {
+                MessageBox.Show("Файл " + phonebasefilename + " не найден. Вы можете создать его вручную в директории с программой. Его формат: номер|имя");
+                return;
+            }
+
+            string[] phonentries = File.ReadAllLines(phonebasefilename);
+            foreach (DataGridViewColumn col in dataGridView1.Columns)
+            {
+                if (col.Name.IndexOf("Details") != -1)
+                {
+                    int curcol = col.Index;
+                    for (int i = 0; i < dataGridView1.RowCount - 1; i++)
+                    {
+                        string rows = dataGridView1.Rows[i].Cells[curcol].Value.ToString();
+                        for (int j = 0; j < phonentries.Count(); j++)
+                        {
+
+                            string[] entry = phonentries[j].Split(new[] { '|' });
+                            // if the current phone number matches the one from the phonebook
+                            if (rows.IndexOf(entry.First()) != -1)
+                            {
+                                dataGridView1.Rows[i].Cells[curcol].Value = entry.Last();
+                            }
+                        }
+
+                    }
+                    break;
+                }
+            }
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            string phonebasefilename = Properties.Settings.Default["phonesbase"].ToString();
+            if (!File.Exists(phonebasefilename))
+            {
+                MessageBox.Show("Файл " + phonebasefilename + " не найден. Вы можете создать его вручную в директории с программой. Его формат: номер|имя");
+                return;
+            }
+            
+            if (checkBox1.Checked)
+            {
+                // show names
+                ShowNamesInsteadOfNumbers();
+            }
+            else
+            {
+                // show numbers
+                string[] phonentries = File.ReadAllLines(phonebasefilename);
+                foreach (DataGridViewColumn col in dataGridView1.Columns)
+                {
+                    if (col.Name.IndexOf("Details") != -1)
+                    {
+                        int curcol = col.Index;
+                        for (int i = 0; i < dataGridView1.RowCount - 1; i++)
+                        {
+                            string rows = dataGridView1.Rows[i].Cells[curcol].Value.ToString();
+                            for (int j = 0; j < phonentries.Count(); j++)
+                            {
+                                string[] entry = phonentries[j].Split(new[] { '|' });
+                                if (rows.IndexOf(entry.Last()) != -1)
+                                {
+                                    dataGridView1.Rows[i].Cells[curcol].Value = entry.First();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }

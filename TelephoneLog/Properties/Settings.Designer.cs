@@ -46,5 +46,17 @@ namespace TelephoneLog.Properties {
                 this["filepattern"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("\\\\Sopka1\\Files\\knownphonenumbers.txt")]
+        public string phonesbase {
+            get {
+                return ((string)(this["phonesbase"]));
+            }
+            set {
+                this["phonesbase"] = value;
+            }
+        }
     }
 }
