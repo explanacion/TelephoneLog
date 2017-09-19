@@ -39,10 +39,6 @@
             this.numericUpDown6 = new System.Windows.Forms.NumericUpDown();
             this.label3 = new System.Windows.Forms.Label();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.date = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Event = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Details = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.button1 = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
@@ -50,6 +46,10 @@
             this.button2 = new System.Windows.Forms.Button();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
+            this.date = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Event = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Details = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
@@ -193,43 +193,14 @@
             this.Details,
             this.Column1});
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.dataGridView1.Location = new System.Drawing.Point(199, 0);
+            this.dataGridView1.Location = new System.Drawing.Point(208, 0);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.RowHeadersWidth = 25;
-            this.dataGridView1.Size = new System.Drawing.Size(532, 615);
+            this.dataGridView1.Size = new System.Drawing.Size(606, 615);
             this.dataGridView1.TabIndex = 5;
             this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
-            // 
-            // date
-            // 
-            this.date.Frozen = true;
-            this.date.HeaderText = "Дата";
-            this.date.Name = "date";
-            this.date.ReadOnly = true;
-            this.date.Width = 80;
-            // 
-            // Event
-            // 
-            this.Event.Frozen = true;
-            this.Event.HeaderText = "Событие";
-            this.Event.Name = "Event";
-            this.Event.ReadOnly = true;
-            this.Event.Width = 76;
-            // 
-            // Details
-            // 
-            this.Details.Frozen = true;
-            this.Details.HeaderText = "Подробности";
-            this.Details.Name = "Details";
-            this.Details.ReadOnly = true;
-            this.Details.Width = 99;
-            // 
-            // Column1
-            // 
-            this.Column1.HeaderText = "Длительность";
-            this.Column1.Name = "Column1";
-            this.Column1.ReadOnly = true;
+            this.dataGridView1.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.dataGridView1_RowsAdded);
             // 
             // openFileDialog1
             // 
@@ -292,11 +263,41 @@
             this.label5.TabIndex = 8;
             this.label5.Text = "Шаблон имени лога";
             // 
+            // date
+            // 
+            this.date.Frozen = true;
+            this.date.HeaderText = "Время";
+            this.date.Name = "date";
+            this.date.ReadOnly = true;
+            this.date.Width = 80;
+            // 
+            // Event
+            // 
+            this.Event.Frozen = true;
+            this.Event.HeaderText = "Событие";
+            this.Event.Name = "Event";
+            this.Event.ReadOnly = true;
+            this.Event.Width = 76;
+            // 
+            // Details
+            // 
+            this.Details.Frozen = true;
+            this.Details.HeaderText = "Подробности";
+            this.Details.Name = "Details";
+            this.Details.ReadOnly = true;
+            this.Details.Width = 99;
+            // 
+            // Column1
+            // 
+            this.Column1.HeaderText = "Длительность";
+            this.Column1.Name = "Column1";
+            this.Column1.ReadOnly = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(731, 615);
+            this.ClientSize = new System.Drawing.Size(814, 615);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.textBox2);
@@ -315,7 +316,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.monthCalendar1);
             this.Name = "Form1";
-            this.Text = "Telephone Log v1.0 (Неклюдов Константин <odexed@mail.ru>) для ППЦ. 2017г.";
+            this.Text = "Telephone Log v1.1 (Неклюдов Константин <odexed@mail.ru>) для ППЦ. 2017г.";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.SizeChanged += new System.EventHandler(this.Form1_SizeChanged);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
@@ -347,12 +348,12 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.DataGridViewTextBoxColumn date;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Event;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Details;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.DataGridViewTextBoxColumn date;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Event;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Details;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
     }
 }

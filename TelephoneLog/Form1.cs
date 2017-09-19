@@ -13,6 +13,7 @@ namespace TelephoneLog
 {
     public partial class Form1 : Form
     {
+        int cnt = 0; // counter of printed lines
         public Form1()
         {
             InitializeComponent();
@@ -30,12 +31,9 @@ namespace TelephoneLog
             textBox1.Text = Properties.Settings.Default["logpath"].ToString();
             textBox2.Text = Properties.Settings.Default["filepattern"].ToString();
             int rwidth = (dataGridView1.Width - dataGridView1.Columns[0].Width) / 3;
-            dataGridView1.Columns[1].Width = rwidth;
-            dataGridView1.Columns[2].Width = rwidth;
-            dataGridView1.Columns[3].Width = rwidth;
-            //dataGridView1.Rows.Add(new string[] { "column2 value", "column6 value", "test" });
-
-
+            dataGridView1.Columns[1].Width = rwidth + 50;
+            dataGridView1.Columns[2].Width = rwidth - 25;
+            dataGridView1.Columns[3].Width = rwidth - 25;
         }
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -50,9 +48,9 @@ namespace TelephoneLog
                 // resize controls
                 dataGridView1.Size = new Size(Form1.ActiveForm.Width - 200, 0);
                 int rwidth = (dataGridView1.Width - dataGridView1.Columns[0].Width) / 3;
-                dataGridView1.Columns[1].Width = rwidth;
-                dataGridView1.Columns[2].Width = rwidth;
-                dataGridView1.Columns[3].Width = rwidth;
+                dataGridView1.Columns[1].Width = rwidth + 50;
+                dataGridView1.Columns[2].Width = rwidth - 25;
+                dataGridView1.Columns[3].Width = rwidth - 25;
             }
             catch (Exception)
             { 
@@ -68,7 +66,7 @@ namespace TelephoneLog
                 using (var sr = new StreamReader(fs, Encoding.Default))
                 {
                     string[] lines = sr.ReadToEnd().Split('\n');
-                    
+                    string phoneline = "";
                     DateTime talkingtill = DateTime.Now;
                     DateTime talkingsince = DateTime.Now;
                     string cdate = monthCalendar1.SelectionRange.Start.ToString("dd-MM-yy");
@@ -105,9 +103,12 @@ namespace TelephoneLog
                             {
                                 string substr = linearr.Last();
                                 substr = substr.Substring(1, substr.Length - 3);
-                                
+
                                 if (tempsince.ToString("dd-MM-yy HH:mm:ss") != "")
-                                    dataGridView1.Rows.Add(new string[] { curtime, "Исходящий звонок", substr, duration });
+                                {
+                                    dataGridView1.Rows.Add(new string[] { curtime, "Исходящий звонок (" + phoneline + ")", substr, duration });
+                                }
+
                             }
                         }
                         else if (line.IndexOf("Get CallerId=") != -1)
@@ -142,7 +143,6 @@ namespace TelephoneLog
                                 substr = substr.Replace("CallerId=", "");
                                 substr = substr.Substring(1, substr.Length - 2);
                                 dataGridView1.Rows.Add(new string[] { curtime, "Входящий звонок", substr, duration });
-
                             }
                         }
                         else if (line.IndexOf("==14:Talking") != -1)
@@ -162,23 +162,40 @@ namespace TelephoneLog
                         else if (line.IndexOf("=ACCEPT") != -1)
                         {
                             success = true;
-                            int lrow = dataGridView1.Rows.GetLastRow(DataGridViewElementStates.Displayed);
                             if (success)
-                                dataGridView1.Rows[lrow - 1].Cells[0].Style.BackColor = Color.LightGreen;
+                                dataGridView1.Rows[cnt - 2].Cells[0].Style.BackColor = Color.LightGreen;
                         }
                         else if (line.IndexOf("=CONNECTED") != -1)
                         {
                             success = true;
-                            int lrow = dataGridView1.Rows.GetLastRow(DataGridViewElementStates.Displayed);
+                            //int lrow = dataGridView1.Rows.GetLastRow(DataGridViewElementStates.Displayed); // lrow-1
                             if (success)
-                                dataGridView1.Rows[lrow - 1].Cells[0].Style.BackColor = Color.LightGreen;
+                                dataGridView1.Rows[cnt-2].Cells[0].Style.BackColor = Color.LightGreen;
                         }
                         else if (line.IndexOf("=BUSY") != -1)
                         {
                             success = false;
-                            int lrow = dataGridView1.Rows.GetLastRow(DataGridViewElementStates.Displayed);
                             if (!success)
-                                dataGridView1.Rows[lrow - 1].Cells[0].Style.BackColor = Color.LightPink;
+                                dataGridView1.Rows[cnt - 2].Cells[0].Style.BackColor = Color.LightPink;
+                        }
+                        else if (line.IndexOf("=CANCEL") != -1)
+                        {
+                            success = false;
+                            if (!success)
+                                dataGridView1.Rows[cnt - 2].Cells[0].Style.BackColor = Color.LightPink;
+                        }
+                        // get the phone line
+                        else if (line.IndexOf("S1d713b3") != -1)
+                        {
+                            phoneline = "Линия 2050030";
+                        }
+                        else if (line.IndexOf("Saa99594") != -1)
+                        {
+                            phoneline = "Линия 2005031";
+                        }
+                        else if (line.IndexOf("S3be03f2") != -1)
+                        {
+                            phoneline = "Линия 2005032";
                         }
 
                     }
@@ -222,6 +239,11 @@ namespace TelephoneLog
             {
                 textBox1.Text = openFileDialog1.FileName;
             }
+        }
+
+        private void dataGridView1_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
+        {
+            cnt++;
         }
     }
 }
